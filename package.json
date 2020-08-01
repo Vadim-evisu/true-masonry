@@ -1,0 +1,36 @@
+{
+  "name": "true-masonry",
+  "version": "1.0.0",
+  "description": "Vue Grid Masonry component",
+  "main": "dist/true-masonry.js",
+  "unpkg": "dist/true-masonry.min.js",
+  "jsdelivr": "dist/true-masonry.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "publish-package": "git push && git push --tags && npm publish --registry=https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "imagesloaded": "4.1.4"
+  },
+  "keywords": [
+    "masonry",
+    "grid",
+    "vue",
+    "massonry",
+    "row"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vadim-evisu/true-masonry.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Vadim-evisu/true-masonry/issues"
+  },
+  "homepage": "https://github.com/Vadim-evisu/true-masonry",
+  "author": "Vlad",
+  "license": "MIT",
+  "devDependencies": {
+    "rollup": "2.23.0",
+    "rollup-plugin-terser": "6.1.0"
+  }
+}
