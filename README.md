@@ -18,6 +18,9 @@ Supported Browswers with CSS Grid
 - Works with elements with different widths
 - Sorting based on height - This kills performance, so if you don't need it we're here for you
 
+### Example
+[CodeSandbox DEMO](https://codesandbox.io/s/truemasonry-zs8zr)
+
 ### 😲 Simple Usage
 
 Add `true-masonry` to your project:
@@ -75,5 +78,44 @@ true-masonry(:gap="{init: 26, 700: 13}", :cols="{init: 5, 1200: 4, 1000: 3, 700:
       p Your Content
 ```
 
+## Options
+
+Props
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Tag</td>
+      <td>String</td>
+      <td>String</td>
+      <td>Defalt wrapper tag</td>
+    </tr>
+    <tr>
+      <td>Cols</td>
+      <td>Object, Number, String</td>
+      <td>2</td>
+      <td>Quantity of columns</td>
+    </tr>
+    <tr>
+      <td>Gap</td>
+      <td>Object, Number, String</td>
+      <td>0</td>
+      <td>Gap between columns</td>
+    </tr>
+    <tr>
+      <td>hasImgs</td>
+      <td>Boolean</td>
+      <td>false</td>
+      <td>Await all images for creating masonry</td>
+    </tr>
+  </tbody>
+</table>
 
 In the above example, the number of columns will default to 4. When the window's is between 1000px and 700px, the number of columns will be 3. The key represents the `max-width` of the window, and `true-masonry` will use the largest key that satisfies this.

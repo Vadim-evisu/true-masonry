@@ -17,18 +17,6 @@ let props = {
     type: [Boolean],
     default: true
   },
-  columnTag: {
-    type: [String],
-    default: 'div'
-  },
-  columnClass: {
-    type: [String, Array, Object],
-    default: function () { return [] }
-  },
-  columnAttr: {
-    type: [Object],
-    default: function () { return ({}) }
-  },
   hasImgs: {
     type: Boolean,
     default: false
@@ -111,10 +99,15 @@ let component = {
       return childItems.filter(cell => cell.tag)
     },
     _resizeMasonryItem(item) {
-      let rowGap = this.displayGutter
-
-      let rowSpan = Math.ceil((item.children[0].elm.
-        getBoundingClientRect().height+rowGap)/(rowGap))
+      let rowGap = this.displayGutter,
+          rowHeight = 0
+      let col = item.elm
+      let colHeight = col.scrollHeight
+      let child = item.children[0].elm
+      let childHeight = child.scrollHeight
+      let setHeight = colHeight >= childHeight ? colHeight : childHeight
+      let rowSpan = 
+        Math.ceil((setHeight+rowGap)/(rowHeight+rowGap))
       item.elm.style.gridRowEnd = `span ${rowSpan}`
     },
     _resizeAllMasonryItems() {
@@ -143,7 +136,7 @@ let component = {
     },
     _waitForImages() {
       let imgLoad = ImageLoaded(this.$el)
-      let onAlways = () => {
+      let onAlways = instance => {
         this._resizeAllMasonryItems()
       }
       imgLoad.on('always', onAlways)
@@ -185,6 +178,7 @@ let component = {
 const defaultOptions = {
   name: 'TrueMasonry'
 }
+
 
 const TrueMasonry = {
   install(Vue, options) {
