@@ -1,6 +1,6 @@
 {
   "name": "true-masonry",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Vue Grid Masonry component",
   "main": "dist/true-masonry.js",
   "unpkg": "dist/true-masonry.min.js",

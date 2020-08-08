@@ -58,17 +58,58 @@ let setBreakpoints = (mixed, windowWidth) => {
   return initValue
 }
 
+let measurements = [
+  'paddingLeft',
+  'paddingRight',
+  'paddingTop',
+  'paddingBottom',
+  'marginLeft',
+  'marginRight',
+  'marginTop',
+  'marginBottom',
+  'borderLeftWidth',
+  'borderRightWidth',
+  'borderTopWidth',
+  'borderBottomWidth'
+]
+
+
+let measurementsLength = measurements.length
+
+/**
+ * getStyle, get style of element, check for Firefox bug
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+ */
+let getStyle = elem => {
+  let style = getComputedStyle( elem )
+  if ( !style ) {
+    logError( 'Style returned ' + style +
+      '. Are you running this code in a hidden iframe on Firefox? ' +
+      'See https://bit.ly/getsizebug1' )
+  }
+  return style
+}
+
+let getStyleSize = value => {
+  // get a number from a string, not a percentage
+  let num = parseFloat( value )
+  // not a percent like '100%', and a number
+  let isValid = value.indexOf('%') == -1 && !isNaN( num )
+  return isValid && num
+}
+
 let component = {
   props,
   data() {
     return {
       displayColumns: 2,
-      displayGutter: 0
+      displayGutter: 0,
+      style: {}
     }
   },
   mounted() {
     this.$nextTick(() => {
-      this._buildGrid()
+      this._reCalculate()
     })
 
     // Bind resize handler to page
@@ -78,7 +119,7 @@ let component = {
   },
   updated() {
     this.$nextTick(() => {
-      this._buildGrid()
+      this._reCalculate()
       if (this.hasImgs) {
         this._waitForImages()
       }
@@ -98,20 +139,50 @@ let component = {
 
       return childItems.filter(cell => cell.tag)
     },
+    _getSize(elemm) {
+      let style = getStyle(elemm)
+      let size = {}
+      size.height = elemm.offsetHeight
+
+      let isBorderBox = size.isBorderBox = style.boxSizing == 'border-box'
+
+      // get all measurements
+      for ( let i=0; i < measurementsLength; i++ ) {
+        let measurement = measurements[i]
+        let value = style[measurement]
+        let num = parseFloat( value )
+        // any 'auto', 'medium' value will be 0
+        size[measurement] = !isNaN( num ) ? num : 0
+      }
+      
+      let paddingHeight = size.paddingTop + size.paddingBottom
+      let marginHeight = size.marginTop + size.marginBottom
+      var borderHeight = size.borderTopWidth + size.borderBottomWidth
+
+      let isBorderBoxSizeOuter = isBorderBox
+
+      let styleHeight = getStyleSize( style.height )
+      let zero = 0
+      if (false !== styleHeight) {
+        size.height = styleHeight +
+          // add padding and border unless it's already including it
+          ( isBorderBoxSizeOuter ? zero : paddingHeight + borderHeight )
+      }
+      size.innerHeight = size.height - ( paddingHeight + borderHeight )
+      size.outerHeight = size.height + marginHeight
+      return size
+    },
     _resizeMasonryItem(item) {
       let rowGap = this.displayGutter,
-          rowHeight = 0
-      let col = item.elm
-      let colHeight = col.scrollHeight
+        rowHeight = 0
       let child = item.children[0].elm
-      let childHeight = child.scrollHeight
-      let setHeight = colHeight >= childHeight ? colHeight : childHeight
+
+      let size = Math.round(this._getSize(child).outerHeight)
       let rowSpan = 
-        Math.ceil((setHeight+rowGap)/(rowHeight+rowGap))
+        Math.ceil((size+rowGap)/(rowHeight+rowGap))
       item.elm.style.gridRowEnd = `span ${rowSpan}`
     },
     _resizeAllMasonryItems() {
-      
       let allItems = this.getChildItemsInColumnsArray()
       for (let i = 0; i < allItems.length; i++) {
         this._resizeMasonryItem(allItems[i])

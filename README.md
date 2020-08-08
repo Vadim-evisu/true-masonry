@@ -1,6 +1,5 @@
 
-### 😎 True Grid Adaptive Masonry.
-
+### 🎲 True Grid Adaptive Masonry.
 
 *`true-masonry`* Is a Vue Component with a simple interface to order items into the desired columns at specified breakpoints. With minimal CSS this leads to a quick, reliable solution that also has great browser support along with fast rendering performance ..just as Vue.js intended.
 
@@ -9,8 +8,6 @@ Supported Browswers with CSS Grid
 
 😄 What does this do
 - Responsive! ..always
-- No Dependencies - Which means no need for jQuery!
-- Works with existing CSS animations on your elements, like fading in on first load
 - CSS powered (Faster to render)
 - Allows for Gaps (Gutters) between elements
 
@@ -38,17 +35,6 @@ import TrueMasonry from 'true-masonry'
 Vue.use(TrueMasonry);
 ```
 
-In your HTML template...
-```HTML
-<true-masonry
-  :cols="3"
-  :gutter="30"
-  >
-  <div v-for="(item, index) in items" :key="index">Item: {{index + 1}}</div>
-</true-masonry>
-
-
-```
 
 ### Resposive Breakpoints
 
@@ -77,6 +63,9 @@ true-masonry(:gap="{init: 26, 700: 13}", :cols="{init: 5, 1200: 4, 1000: 3, 700:
     .div
       p Your Content
 ```
+
+In the above example, the number of columns will default to 4. When the window's is between 1000px and 700px, the number of columns will be 3. The key represents the `max-width` of the window, and `true-masonry` will use the largest key that satisfies this.
+
 
 ## Options
 
@@ -118,4 +107,3 @@ Props
   </tbody>
 </table>
 
-In the above example, the number of columns will default to 4. When the window's is between 1000px and 700px, the number of columns will be 3. The key represents the `max-width` of the window, and `true-masonry` will use the largest key that satisfies this.
